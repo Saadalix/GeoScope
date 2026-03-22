@@ -8,6 +8,6 @@ if (!DEBUG_MODE) {
 }
 
 // API Keys and Usernames
-$weatherKey = "";
+$weatherKey = "";          # OpenWeatherMap API
 $username = "";
 ?>
