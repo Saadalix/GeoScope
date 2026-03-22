@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gazetteer</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="assets/css/leaflet.css" />
+
+    <link rel="stylesheet" href="assets/css/MarkerCluster.css" />
+
+    <link rel="stylesheet" href="assets/css/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="assets/css/leaflet.extra-markers.min.css" />
+    <link rel="stylesheet" href="assets/css/easy-button.css" />
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="assets/css/all.min.css" />
+
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <!-- PRE-LOADER HTML -->
+    <div id="preloader">
+      <!-- Spinning globe icon -->
+      <i class="fas fa-globe-americas preloader-icon"></i>
+
+      <!-- Title -->
+      <h1 class="preloader-title">Gazetteer</h1>
+
+      <!-- Subtitle -->
+      <p class="preloader-subtitle">Your Portal to the World</p>
+
+      <!-- Progress bar -->
+      <div class="preloader-bar-container">
+        <div class="preloader-bar" id="preloaderBar"></div>
+      </div>
+
+      <!-- Status message -->
+      <p class="preloader-status" id="preloaderStatus">Initialising map...</p>
+    </div>
+
+    <!-- Country Select Dropdown with Search Icon -->
+    <div id="selectContainer">
+      <i class="fas fa-search"></i>
+      <select id="countrySelect" class="form-control" title="Select a country">
+        <option value=""></option>
+      </select>
+    </div>
+
+    <!-- Map -->
+    <div id="map"></div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner">
+      <div class="spinner-border text-white custom-spinner-size"></div>
+    </div>
+
+    <!-- Error Toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div
+        id="errorToast"
+        class="toast"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="toast-body bg-danger text-white d-flex align-items-center">
+          <i class="fas fa-exclamation-circle me-2"></i>
+          <span id="errorMessage" class="flex-grow-1"></span>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODALS -->
+
+    <!-- 1. COUNTRY INFO MODAL -->
+    <div
+      class="modal fade"
+      id="infoModal"
+      tabindex="-1"
+      aria-labelledby="infoModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title" id="infoModalLabel">
+              <i class="fas fa-info-circle"></i> Country Information
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body position-relative">
+            <!-- Loading overlay -->
+            <div
+              id="infoLoading"
+              class="position-absolute top-0 start-0 w-100 h-100 bg-white d-none justify-content-center align-items-center"
+            >
+              <div class="text-center">
+                <div class="spinner-border text-success" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3 text-muted">Loading country information...</p>
+              </div>
+            </div>
+
+            <!-- Table content -->
+            <table class="table table-striped table-sm">
+              <tbody>
+                <tr>
+                  <td colspan="3" class="text-center">
+                    <img
+                      id="infoFlag"
+                      src=""
+                      alt="Flag"
+                      class="img-fluid rounded shadow-sm"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td><i class="fas fa-flag text-success"></i></td>
+                  <td>Country</td>
+                  <td class="text-end" id="infoCountry">-</td>
+                </tr>
+                <tr>
+                  <td><i class="fas fa-city text-success"></i></td>
+                  <td>Capital</td>
+                  <td class="text-end" id="infoCapital">-</td>
+                </tr>
+                <tr>
+                  <td><i class="fas fa-globe text-success"></i></td>
+                  <td>Continent</td>
+                  <td class="text-end" id="infoContinent">-</td>
+                </tr>
+                <tr>
+                  <td><i class="fas fa-expand-arrows-alt text-success"></i></td>
+                  <td>Area</td>
+                  <td class="text-end" id="infoArea">-</td>
+                </tr>
+                <tr>
+                  <td><i class="fas fa-users text-success"></i></td>
+                  <td>Population</td>
+                  <td class="text-end" id="infoPopulation">-</td>
+                </tr>
+                <tr>
+                  <td><i class="fas fa-language text-success"></i></td>
+                  <td>Language(s)</td>
+                  <td class="text-end" id="infoLanguages">-</td>
+                </tr>
+                <tr>
+                  <td><i class="fas fa-clock text-success"></i></td>
+                  <td>Time Zone</td>
+                  <td class="text-end" id="infoTimezone">-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-sm btn-success"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. WEATHER MODAL -->
+    <div
+      class="modal fade"
+      id="weatherModal"
+      tabindex="-1"
+      aria-labelledby="weatherModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title" id="weatherModalLabel">
+              <i class="fas fa-cloud-sun"></i> Capital City Weather
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <h6 id="weatherCapitalHeading" class="text-center mb-3"></h6>
+
+            <table class="table table-striped table-sm">
+              <tbody>
+                <tr>
+                  <td>
+                    <i class="fas fa-temperature-high text-success me-2"></i
+                    >today
+                  </td>
+                  <td class="text-end" id="weatherCurrent">-</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h6 class="mt-4 mb-0 small">
+              <i class="fas fa-calendar-alt me-2 text-success"></i>Forecasts
+            </h6>
+            <div
+              id="weatherForecast"
+              class="row g-0 flex-nowrap overflow-auto py-2"
+            ></div>
+
+            <hr class="mt-2" />
+            <div class="text-center">
+              <p class="text-muted mb-0">
+                <i class="fas fa-info-circle mb-0"></i>
+                <small
+                  >Powered by
+                  <a
+                    href="https://openweathermap.org/"
+                    target="_blank"
+                    rel="noopener"
+                    class="text-decoration-none text-success"
+                    >OpenWeather</a
+                  ></small
+                >
+              </p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-sm btn-success"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. CURRENCY MODAL -->
+    <div
+      class="modal fade"
+      id="currencyModal"
+      tabindex="-1"
+      aria-labelledby="currencyModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title" id="currencyModalLabel">
+              <i class="fas fa-dollar-sign"></i> Currency Converter
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="currencyFrom" class="form-label">From</label>
+                <select id="currencyFrom" class="form-select"></select>
+              </div>
+              <div class="col-md-6">
+                <label for="currencyTo" class="form-label">To</label>
+                <select id="currencyTo" class="form-select"></select>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="currencyAmount" class="form-label">Amount</label>
+                <input
+                  type="number"
+                  id="currencyAmount"
+                  class="form-control"
+                  value="1"
+                  min="0"
+                  step="0.01"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="currencyResult" class="form-label">Result</label>
+                <input
+                  type="text"
+                  id="currencyResult"
+                  class="form-control"
+                  readonly
+                />
+              </div>
+            </div>
+            <button id="convertBtn" class="btn btn-success w-100">
+              <i class="fas fa-exchange-alt me-2"></i>Convert
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-sm btn-success"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. WIKIPEDIA MODAL -->
+    <div
+      class="modal fade"
+      id="wikiModal"
+      tabindex="-1"
+      aria-labelledby="wikiModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title" id="wikiModalLabel">
+              <i class="fab fa-wikipedia-w"></i> Wikipedia
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="wikiContent"></div>
+            <a
+              id="wikiLink"
+              href="#"
+              target="_blank"
+              class="btn btn-success w-100 mt-3"
+            >
+              <i class="fab fa-wikipedia-w me-2"></i>Read More
+            </a>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-sm btn-success"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. FUN FACTS MODAL -->
+    <div
+      class="modal fade"
+      id="funFactsModal"
+      tabindex="-1"
+      aria-labelledby="funFactsModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title" id="funFactsModalLabel">
+              <i class="fas fa-lightbulb"></i> Fun Facts
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="funFactsList"></div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-sm btn-success"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap 5 -->
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Leaflet (must load before extra markers) -->
+    <script src="assets/js/leaflet.js"></script>
+
+    <!-- Leaflet Extra Markers -->
+    <script src="assets/js/leaflet.extra-markers.min.js"></script>
+
+    <!-- Other Leaflet plugins -->
+    <script src="assets/js/leaflet.markercluster.js"></script>
+    <script src="assets/js/easy-button.js"></script>
+
+    <!-- Your app -->
+    <script src="assets/js/app.js"></script>
+  </body>
+</html>
