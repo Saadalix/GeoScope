@@ -8,6 +8,6 @@ if (!DEBUG_MODE) {
 }
 
 // API Keys and Usernames
-$weatherKey = "fb4e03cd0a1bd4bdddd334f531349d0b";
-$username = "saadalix";
+$weatherKey = "";
+$username = "";
 ?>
