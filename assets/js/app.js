@@ -1,4 +1,4 @@
-// GAZETTEER
+// GeoScope
 var map;
 var countryLayer;
 var cityMarkers;
