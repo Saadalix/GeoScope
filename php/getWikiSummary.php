@@ -20,7 +20,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
 curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 // Best practice: Wikipedia API requires a descriptive User-Agent
-curl_setopt($ch, CURLOPT_USERAGENT, 'Gazetteer/1.0 (saad.alix99@example.com)'); 
+curl_setopt($ch, CURLOPT_USERAGENT, 'GeoScope/1.0 (saad.alix99@example.com)'); 
 
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
