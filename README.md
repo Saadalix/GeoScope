@@ -1,4 +1,4 @@
-# 🌍 GeoScope — Explore the World, Instantly
+# 🌍 GeoScope - Explore the World, Instantly
 
 An interactive, responsive web application that provides comprehensive 
 geographical, meteorological, and economic information about countries 
