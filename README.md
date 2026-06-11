@@ -10,29 +10,29 @@ for real-time data.
 ## ✨ Features
 
 ### 🗺️ Interactive Map
-- **Leaflet.js Integration** — Smooth, interactive world map.
-- **Marker Clustering** — Efficiently displays major cities with grouped markers.
-- **Country Borders** — Highlighting of selected country boundaries in a custom green theme.
-- **Auto-location** — Detects user location on load to centre the map automatically.
+- **Leaflet.js Integration** - Smooth, interactive world map.
+- **Marker Clustering** - Efficiently displays major cities with grouped markers.
+- **Country Borders** - Highlighting of selected country boundaries in a custom green theme.
+- **Auto-location** - Detects user location on load to centre the map automatically.
 
 ### 💡 Insights & Trivia
-- **Wikipedia Summaries** — Fetches 50-word previews and high-resolution flags for each country.
-- **Fun Facts Explorer** — A dedicated modal showcasing unique trivia and interesting data points.
-- **Currency Converter** — Real-time exchange rate calculation between the country's local currency and major globals.
+- **Wikipedia Summaries** - Fetches 50-word previews and high-resolution flags for each country.
+- **Fun Facts Explorer** - A dedicated modal showcasing unique trivia and interesting data points.
+- **Currency Converter** - Real-time exchange rate calculation between the country's local currency and major globals.
 
 ---
 
 ## 🛠️ Technologies Used
 
 ### Frontend
-- **HTML5 & CSS3** — Modern semantic markup and responsive Grid/Flexbox layouts.
-- **JavaScript (ES6) & jQuery 3.6.0** — Core logic and simplified AJAX handling.
-- **Bootstrap 5.3** — Modern framework for modals, buttons, and toast notifications.
-- **Leaflet 1.9.4** — Core mapping engine with MarkerCluster and EasyButton plugins.
+- **HTML5 & CSS3** - Modern semantic markup and responsive Grid/Flexbox layouts.
+- **JavaScript (ES6) & jQuery 3.6.0** - Core logic and simplified AJAX handling.
+- **Bootstrap 5.3** - Modern framework for modals, buttons, and toast notifications.
+- **Leaflet 1.9.4** - Core mapping engine with MarkerCluster and EasyButton plugins.
 
 ### Backend
-- **PHP 7.4+** — Server-side processing for API data aggregation.
-- **cURL** — Secure server-to-server communication with external APIs.
+- **PHP 7.4+** - Server-side processing for API data aggregation.
+- **cURL** - Secure server-to-server communication with external APIs.
 
 ---
 
@@ -52,9 +52,9 @@ The backend is modularised for fast performance and clean separation of concerns
 | `getApiData.php` | Handles reverse geocoding to identify a country from coordinates |
 
 ### Data & Assets
-- **`/data/countryBorders.geo.json`** — Primary geographical dataset containing global country boundaries.
-- **`/assets/css/images/`** — Map-specific marker variations and shadow assets.
-- **`/assets/images/`** — Stores favicon only.
+- **`/data/countryBorders.geo.json`** - Primary geographical dataset containing global country boundaries.
+- **`/assets/css/images/`** - Map-specific marker variations and shadow assets.
+- **`/assets/images/`** - Stores favicon only.
 
 ---
 
@@ -73,9 +73,9 @@ The backend is modularised for fast performance and clean separation of concerns
 ## 🚀 Getting Started
 
 1. **Clone** `git clone https://github.com/Saadalix/geoscope`
-2. **Configure** — Add your API keys to `php/config.php`
-3. **Permissions** — Ensure `/data` and `/php` folders have `755` permissions on Linux servers
-4. **Deployment note** — When deploying to a Linux host (e.g. IONOS), ensure all file references match folder names exactly — Linux is case-sensitive
+2. **Configure** - Add your API keys to `php/config.php`
+3. **Permissions** - Ensure `/data` and `/php` folders have `755` permissions on Linux servers
+4. **Deployment note** - When deploying to a Linux host (e.g. IONOS), ensure all file references match folder names exactly — Linux is case-sensitive
 
 ---
 
